@@ -1,11 +1,13 @@
 import { dialogsReducer } from "./dialogs-reducer"
 import { profileReducer } from "./profile-reducer"
 
+// Я ДОПИСАЛ В STORE МЕТОД GETSTORE И ТИПИЗАЦИЯ К НЕМУ В StoreType(ВРОДЕ НЕ ПРАВИЛЬНО)
 export type StoreType = {
     _state: StateType
     _callSubscriber: (_state: StateType) => void
 
-    getState: any
+    getState: () => StateType
+    getStore: () => StoreType
     subscriber: (observer: Function) => void
 
     dispatch: (action: any) => void
@@ -71,6 +73,9 @@ export const store: StoreType = {
     getState() {
         return store._state;
     },
+    getStore() {
+        return this
+    },
     _callSubscriber(_state: StateType) {
         console.log('state was change')
     },
@@ -86,6 +91,4 @@ export const store: StoreType = {
         this._callSubscriber(this._state)
     }
 }
-
-
 // ================= FUNCTION ACTION_CREATOR ================= //

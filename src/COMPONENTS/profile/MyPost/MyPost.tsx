@@ -6,8 +6,9 @@ import { addNewPostActionCreator, addPostActionCreator } from '../../../redux/pr
 
 
 type PropsType = {
+    updateNewPostText: (text: string) => void
+    addPost: () => void
     posts: PostsType
-    dispatch: (action: any) => void
     newPostText: string
 }
 
@@ -17,19 +18,19 @@ export const MyPost = (props: PropsType) => {
         message={elem.message} like={elem.like} />
     )
 
-    const onChangeNewPostHandler = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        props.dispatch(addNewPostActionCreator(e.currentTarget.value))
+    const onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        let text = e.currentTarget.value
+        props.updateNewPostText(text)
     }
-    const onClickNewPost = () => {
-        props.dispatch(addPostActionCreator())
-    }
+    const onAddPost = () => props.addPost()
+
 
     return (
         <S.MyPostWrapper>
             <h3>My Post</h3>
             <div>
-                <div><textarea value={props.newPostText} onChange={onChangeNewPostHandler} /></div>
-                <button onClick={onClickNewPost}>add post</button>
+                <div><textarea value={props.newPostText} onChange={onPostChange} /></div>
+                <button onClick={onAddPost}>add post</button>
             </div>
             <div>
                 {renderPostData}

@@ -9,14 +9,25 @@ import { News } from './COMPONENTS/news/News';
 import { Music } from './COMPONENTS/music/Music';
 import { Settings } from './COMPONENTS/settings/Settings';
 import { Routes, Route } from 'react-router-dom';
-import { StateType } from './redux/store';
+import { StateType, StoreType } from './redux/store';
+import { DialogsContainer } from './COMPONENTS/dialogs/DialogsContainer';
+import { Provider } from 'react-redux';
+import { store_redux } from './redux/redux-store';
+import { MyContext } from '.';
+import { Users } from './COMPONENTS/users/Users';
+import { UsersContainer } from './COMPONENTS/users/UsersContainer';
 
-type PropsType = {
-  state: StateType
-  dispatch: (action: any) => void
-}
 
-const App = (props: PropsType) => {
+// type PropsType = {
+//   state: StateType
+//   dispatch: (action: any) => void
+//   store: any
+// }
+
+const App = () => {
+
+  const state = React.useContext(MyContext)
+
   return (
     <WrapperContent>
 
@@ -25,24 +36,15 @@ const App = (props: PropsType) => {
 
       <PageDialogs>
         <Routes>
-          <Route path="/" element={<Profile
-            profilePage={props.state.profilePage.post}
-            newPostText={props.state.profilePage.newPostText}
-            dispatch={props.dispatch}
-          />} />
-
-          <Route path="dialogs/*" element={<Dialogs
-            newMessageBody={props.state.dialogsPage.newMessageBody}
-            dialogs={props.state.dialogsPage.dialogs}
-            messages={props.state.dialogsPage.messages}
-            dispatch={props.dispatch}
-          />} />
-
+          <Route path="/*" element={<Profile />} />
+          <Route path="dialogs/*" element={<DialogsContainer store={state} />} />
+          <Route path="users" element={<UsersContainer store={state} />} />
           <Route path="news" element={<News />} />
           <Route path="music" element={<Music />} />
           <Route path="settings" element={<Settings />} />
         </Routes>
       </PageDialogs>
+
     </WrapperContent>
   );
 }
