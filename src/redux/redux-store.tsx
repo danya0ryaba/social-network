@@ -1,5 +1,4 @@
 import { combineReducers, legacy_createStore as createStore } from "redux";
-import { store } from "./store";
 import { profileReducer } from "./profile-reducer";
 import { dialogsReducer } from "./dialogs-reducer";
 import { usersReducer } from "./users-reducer";
@@ -11,6 +10,7 @@ const reducers = combineReducers({
     dialogsPage: dialogsReducer,
     usersPage: usersReducer
 });
-
+// отсебятина
+export type RootState = ReturnType<typeof reducers>
 export const store_redux = createStore(reducers)
 

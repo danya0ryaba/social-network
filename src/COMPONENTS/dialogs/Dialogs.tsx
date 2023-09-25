@@ -22,8 +22,8 @@ type MessagesItemType = {
 
 export const Dialogs = (props: PropsType) => {
 
-    let renderDialogsItem = props.dialogsPage.dialogs.map((elem: DialogsItemType) => <DialogItem name={elem.name} id_to={elem.id_to} />)
-    let renderMessageItem = props.dialogsPage.messages.map((elem: MessagesItemType) => <Message message={elem.message} />)
+    let renderDialogsItem = props.dialogsPage.dialogs.map((elem: DialogsItemType) => <DialogItem key={elem.id_to} name={elem.name} id_to={elem.id_to} />)
+    let renderMessageItem = props.dialogsPage.messages.map((elem: MessagesItemType) => <Message key={elem.id} message={elem.message} />)
 
     const onSendMessageClick = () => {
         props.sendMessageClick()
