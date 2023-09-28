@@ -2,15 +2,16 @@ import { combineReducers, legacy_createStore as createStore } from "redux";
 import { profileReducer } from "./profile-reducer";
 import { dialogsReducer } from "./dialogs-reducer";
 import { usersReducer } from "./users-reducer";
-
-// надо как-то передать не  state, а весь сторе целиком
+import { authReducer } from "./auth-reducer";
 
 const reducers = combineReducers({
     profilePage: profileReducer,
     dialogsPage: dialogsReducer,
-    usersPage: usersReducer
+    usersPage: usersReducer,
+    auth: authReducer
 });
-// отсебятина
+
 export type RootState = ReturnType<typeof reducers>
+
 export const store_redux = createStore(reducers)
 

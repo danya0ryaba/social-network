@@ -1,46 +1,111 @@
 import React from 'react'
-import { UserItemType } from '../../redux/users-reducer'
 import { S } from './users_style'
-// import axios from 'axios'
+import { UserItemType } from '../../redux/users-reducer'
+import userPhoto from '../../assets/users/984126_avatar_male_man_user_person_icon.png'
+import { NavLink } from 'react-router-dom'
+import axios from 'axios'
 
-export const Users = (props: any) => {
-    if (props.users.length === 0) {
-        props.setUsers([
-            { id: 1, photoUrl: 'https://img.championat.com/s/735x490/news/big/c/c/gennadij-golovkin-osvobodil-titul-chempiona-mira-v-srednem-vese-po-versii-ibo_16868170831165199102.jpg', followed: true, fullName: 'Daniil', status: 'i still trying', location: { city: 'Solik', country: 'Russia' } },
-            { id: 2, photoUrl: 'https://img.championat.com/s/735x490/news/big/c/c/gennadij-golovkin-osvobodil-titul-chempiona-mira-v-srednem-vese-po-versii-ibo_16868170831165199102.jpg', followed: false, fullName: 'Sveta', status: 'i still trying', location: { city: 'Moskva', country: 'Russia' } },
-            { id: 3, photoUrl: 'https://img.championat.com/s/735x490/news/big/c/c/gennadij-golovkin-osvobodil-titul-chempiona-mira-v-srednem-vese-po-versii-ibo_16868170831165199102.jpg', followed: true, fullName: 'Max', status: 'i still trying', location: { city: 'EKB', country: 'Russia' } }
-        ])
+type UsersPropsType = {
+    users: UserItemType[]
+    totalUsersCount: number
+    pageSize: number
+    currentPage: number
+    onChangePages: (pageNumber: number) => void
+    follow: (userId: number) => void
+    unfollow: (userId: number) => void
+}
+
+export const Users: React.FC<UsersPropsType> = ({
+    totalUsersCount,
+    pageSize,
+    currentPage,
+    users,
+    onChangePages,
+    follow,
+    unfollow
+}) => {
+
+    let pagesCount = Math.ceil(totalUsersCount / pageSize)
+    let pagesArray = []
+    for (let i = 1; i <= pagesCount; i++) {
+        pagesArray.push(i)
     }
-    // axios('https://64bf5ea45ee688b6250d538d.mockapi.io/items').then(response => {
-    //     console.log(response)
-    // })
+    const curPF = ((currentPage - 5) < 0) ? 0 : currentPage - 5;
+    const slicedPages = pagesArray.slice(curPF, currentPage + 5);
+
+
+    const requestFollow = () => {
+        axios.post('https://social-network.samuraijs.com/api/1.0/follow/2')
+            .then(response => {
+
+            })
+    }
+
+    const requestUnfollow = () => {
+
+    }
 
     return <div>
-        {
-            props.users.map((user: UserItemType, index: number) => <div key={index}>
-                <span>
-                    <div>
-                        <S.ImageAvatar src={user.photoUrl} alt="avatar" />
-                    </div>
-                    <div>
-                        {
-                            user.followed ? <button onClick={() => props.unfollow(user.id)}>Unfollow</button>
-                                : <button onClick={() => props.follow(user.id)}>Follow</button>
-                        }
-                    </div>
-                </span>
-                <span>
-                    <span>
-                        <div>{user.fullName}</div>
-                        <div>{user.status}</div>
-                    </span>
+        <div>
 
-                    <span>
-                        <div>{user.location.country}</div>
-                        <div>{user.location.city}</div>
-                    </span>
+            {slicedPages.map<JSX.Element>((el: number, index) => {
+                return <S.MySpan onClick={(e) => onChangePages(el)} key={index}>{el}</S.MySpan>
+            })}
+
+        </div>
+        {users.map((user: UserItemType, index: number) => <div key={index}>
+            <span>
+                <div>
+                    <NavLink to={`/profile/${user.id}`}>
+                        <S.ImageAvatar src={user.photos.small !== null ? user.photos.small : userPhoto} alt="avatar" />
+                    </NavLink>
+
+                </div>
+                <div>
+                    {user.followed ?
+
+
+                        <button onClick={() => {
+
+                            axios.delete(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {
+                                withCredentials: true,
+                                headers: {
+                                    "API-KEY": "0411e24e-f7ad-4c92-8265-27c8903329a2"
+                                }
+                            }).then(response => {
+                                if (response.data.resultCode == 0) {
+                                    unfollow(user.id)
+                                }
+                            })
+
+                        }}>Unfollow</button>
+
+                        : <button onClick={() => {
+
+                            axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${user.id}`, {}, {
+                                withCredentials: true,
+                                headers: {
+                                    "API-KEY": "0411e24e-f7ad-4c92-8265-27c8903329a2"
+                                }
+                            }).then(response => {
+                                if (response.data.resultCode == 0) {
+                                    follow(user.id)
+                                }
+                            })
+                        }}>Follow</button>}
+                </div>
+            </span>
+            <span>
+                <span>
+                    <div>{user.name}</div>
+                    <div>{user.status}</div>
                 </span>
-            </div>)
-        }
-    </div>
+
+                <span>
+                    <div>'user.location.country'</div>
+                    <div>user.location.city</div>
+                </span>
+            </span>
+        </div>)}
+    </div >
 }

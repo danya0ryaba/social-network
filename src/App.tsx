@@ -1,28 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import './App.css';
-import { Header } from './COMPONENTS/header/Header';
 import { Navbar } from './COMPONENTS/navbar/Navbar';
-import { Profile } from './COMPONENTS/profile/Profile';
-import { Dialogs } from './COMPONENTS/dialogs/Dialogs';
 import { News } from './COMPONENTS/news/News';
 import { Music } from './COMPONENTS/music/Music';
 import { Settings } from './COMPONENTS/settings/Settings';
 import { Routes, Route } from 'react-router-dom';
-import { StateType, StoreType } from './redux/store';
 import { DialogsContainer } from './COMPONENTS/dialogs/DialogsContainer';
-import { Provider } from 'react-redux';
-import { store_redux } from './redux/redux-store';
 import { MyContext } from '.';
-import { Users } from './COMPONENTS/users/Users';
 import { UsersContainer } from './COMPONENTS/users/UsersContainer';
+import ProfileContainer from './COMPONENTS/profile/ProfileContainer';
+import HeaderContainer from './COMPONENTS/header/HeaderContainer';
 
-
-// type PropsType = {
-//   state: StateType
-//   dispatch: (action: any) => void
-//   store: any
-// }
 
 const App = () => {
 
@@ -31,12 +20,13 @@ const App = () => {
   return (
     <WrapperContent>
 
-      <Header />
-      <Navbar />
+      <HeaderContainer />
 
+      <Navbar />
+      {/* не уверен что нужен ? после profile , но тогда не грузить profile без userId */}
       <PageDialogs>
         <Routes>
-          <Route path="/*" element={<Profile />} />
+          <Route path="/profile?/:userId?" element={<ProfileContainer />} />
           <Route path="dialogs/*" element={<DialogsContainer store={state} />} />
           <Route path="users" element={<UsersContainer store={state} />} />
           <Route path="news" element={<News />} />

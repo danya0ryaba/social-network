@@ -1,9 +1,25 @@
-import { DialogsPageType } from "./store"
+const UPDATE_NEW_MESSAGE_BODY = 'UPDATE_NEW_MESSAGE_BODY'
+const SEND_MESSAGE = 'SEND_MESSAGE'
 
-const UPDATE_NEW_MESSAGE_BODY = 'UPDATE-NEW-MESSAGE-BODY'
-const SEND_MESSAGE = 'SEND-MESSAGE'
+// ==================== ТИПИЗАЦИЯ STATE ==================== //
+export type DialogsPageType = {
+    messages: MessagesItemType[]
+    dialogs: DialogsItemType[]
+    newMessageBody: string
+}
+export type MessagesItemType = {
+    message: string
+    id: number
+}
+export type DialogsItemType = {
+    name: string
+    id_to: number
+}
 
-const initialState = {
+// ==================== ТИПИЗАЦИЯ ACTION ==================== //
+type ActionType = 'UPDATE_NEW_MESSAGE_BODY' | 'SEND_MESSAGE'
+
+const initialState: DialogsPageType = {
     messages: [
         { message: 'Hi', id: 1 },
         { message: 'How,are you?', id: 2 },
@@ -21,7 +37,7 @@ const initialState = {
     newMessageBody: ''
 }
 
-export const dialogsReducer = (state: DialogsPageType = initialState, action: { type: string, body: string }) => {
+export const dialogsReducer = (state: DialogsPageType = initialState, action: { type: ActionType, body: string }) => {
 
     switch (action.type) {
         case UPDATE_NEW_MESSAGE_BODY:

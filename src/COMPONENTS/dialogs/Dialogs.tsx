@@ -1,9 +1,7 @@
-import React, { ChangeEvent, RefObject } from "react";
+import React, { ChangeEvent } from "react";
 import { S } from './dialogs_style'
 import { DialogItem } from "./dialogitem/DialogItem";
 import { Message } from "./message/Message";
-import { DialogsType, MessagesType } from '../../redux/store'
-import { sendMessageCreator, updateNewMeessageBodyCreator } from "../../redux/dialogs-reducer";
 
 
 type PropsType = {

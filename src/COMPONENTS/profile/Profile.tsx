@@ -1,22 +1,16 @@
-import React, { ChangeEvent } from "react";
-import { MyPost } from "./MyPost/MyPost";
-import { ProfileInfo } from "./profileinfo/ProfileInfo";
-import { PostsType } from '../../redux/store'
-import { MyPostContainer } from "./MyPost/MyPostContainer";
-import { MyContext } from "../..";
 
-type PropsType = {
-    store: any
+import { ProfileInfo } from "./profileinfo/ProfileInfo";
+import { MyPostContainer } from "./MyPost/MyPostContainer";
+
+export type ProfilePropsType = {
+    profile: any
 }
 
-export const Profile = () => {
-
-    const store = React.useContext(MyContext)
-
+export const Profile: React.FC<ProfilePropsType> = ({ profile }) => {
     return (
         <div className='content'>
-            <ProfileInfo />
-            <MyPostContainer store={store} />
+            <ProfileInfo profile={profile} />
+            <MyPostContainer />
         </div>
     )
 }

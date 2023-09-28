@@ -6,6 +6,12 @@ const ImageAvatar = styled.img`
     border-radius: 50%;
 `
 
+const MySpan = styled.span`
+  cursor: pointer;
+  font-size: 20px;
+`
+
 export const S = {
-    ImageAvatar
+    ImageAvatar,
+    MySpan
 }

@@ -1,22 +1,20 @@
-import React, { ChangeEvent, RefObject } from "react";
+import { ChangeEvent } from "react";
 import { S } from './mypost_style'
 import { Post } from "./Post/Post";
-import { PostsType } from "../../../redux/store";
-import { addNewPostActionCreator, addPostActionCreator } from '../../../redux/profile-reducer'
+import { PostItemType } from "../../../redux/profile-reducer";
 
 
 type PropsType = {
     updateNewPostText: (text: string) => void
     addPost: () => void
-    posts: PostsType
+    posts: Array<PostItemType>
     newPostText: string
 }
 
 export const MyPost = (props: PropsType) => {
 
     const renderPostData = props.posts.map(elem => <Post key={elem.id}
-        message={elem.message} like={elem.like} />
-    )
+        message={elem.message} like={elem.like} />)
 
     const onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
         let text = e.currentTarget.value

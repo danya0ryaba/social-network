@@ -1,7 +1,4 @@
-import React from "react";
 import { S } from './post_style'
-import { PostItemType } from "../../../../redux/store";
-
 
 type PropsType = {
     message: string | undefined
