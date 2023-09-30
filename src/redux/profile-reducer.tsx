@@ -1,3 +1,6 @@
+import { usersAPI } from "../DAL/api"
+import { Dispatch, AnyAction } from 'redux';
+
 const ADD_POST = 'ADD_POST'
 const UPDATE_NEWPOST_TEXT = 'UPDATE_NEWPOST_TEXT'
 const SET_USER_PROFILE = 'SET_USER_PROFILE'
@@ -54,7 +57,21 @@ export const profileReducer = (state: ProfilePageType = initialState, action: Ac
 
 // ========== ACTION-CREATOR ========== //
 export const addPostActionCreator = (): addPostActionCreatorType => ({ type: ADD_POST })
-
 export const addNewPostActionCreator = (newText: string): addNewPostActionCreatorType => ({ type: UPDATE_NEWPOST_TEXT, newText })
 
-export const setUserProfile = (profile: any): setUSerProfileType => ({ type: SET_USER_PROFILE, profile })
+export const setUserProfile = (profile: any): setUSerProfileType => {
+    // надо типизировать profile
+    console.log(profile);
+
+    return { type: SET_USER_PROFILE, profile }
+}
+
+
+
+export const getUserProfile = (userId: string) => {
+    return (dispatch: Dispatch<AnyAction>) => {
+        usersAPI.getProfile(userId).then(resp => {
+            dispatch(setUserProfile(resp.data))
+        })
+    }
+}

@@ -1,3 +1,5 @@
+import { Dispatch, AnyAction } from 'redux';
+import { authAPI } from '../DAL/api';
 
 const SET_USER_DATA = 'SET_USER_DATA'
 
@@ -14,7 +16,6 @@ export type DataItemType = {
     login: string
     email: string
 }
-
 // ================= ТИПИЗАЦИЯ ДЛЯ ACTION =================//
 
 type ActionType = ReturnType<typeof setAuthUserData>
@@ -41,3 +42,14 @@ export const authReducer = (state: initialStateType = initialState, action: Acti
 }
 
 export const setAuthUserData = (data: DataItemType) => ({ type: SET_USER_DATA, data })
+
+
+export type GetAuthUserDataType = ReturnType<typeof getAuthUserData>
+
+export const getAuthUserData = () => {
+    return (dispatch: Dispatch<AnyAction>) => {
+        authAPI.me().then(res => {
+            if (res.data.resultCode === 0) dispatch(setAuthUserData(res.data.data))
+        })
+    }
+}

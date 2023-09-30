@@ -1,9 +1,7 @@
 import { connect } from 'react-redux'
-import { UserItemType, follow, setCurrentPage, setIsFetching, setTotalCount, setUsers, unfollow } from '../../redux/users-reducer'
-import { Dispatch, AnyAction } from 'redux';
+import { IsDisabletType, UserItemType, followThunkCreator, getUsersThunkCreator, setDisabledFollow, setIsFetching, unfollowThunkCreator } from '../../redux/users-reducer'
 import { RootState } from '../../redux/redux-store';
 import React from 'react';
-import axios from 'axios';
 import { Users } from './Users';
 import { Preloader } from '../common/preloader/Preloader';
 
@@ -18,36 +16,22 @@ interface MyClassUsersProps {
     totalUsersCount: number
     currentPage: number
     isFetching: boolean
-    setUsers: (users: UserItemType[]) => void
-    follow: (userId: number) => void
-    unfollow: (userId: number) => void
-    setCurrentPage: (currentPage: number) => void
-    setTotalCount: (totalCount: number) => void
+    isDisabled: IsDisabletType
     setIsFetching: (value: boolean) => void
+    setDisabledFollow: (isFetching: boolean, id: number) => void
+    getUsersThunkCreator: any
+    unfollowThunkCreator: any
+    followThunkCreator: any
 }
 
 class UsersContainerClass extends React.Component<MyClassUsersProps, RootState> {
 
     componentDidMount() {
-        this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${this.props.currentPage}&count=${this.props.pageSize}`, {
-            withCredentials: true,
-        }).then(response => {
-            this.props.setIsFetching(false)
-            this.props.setUsers(response.data.items)
-            this.props.setTotalCount(response.data.totalCount)
-        })
+        this.props.getUsersThunkCreator(this.props.currentPage, this.props.pageSize)
     }
 
     onChangePages = (pageNumber: number) => {
-        this.props.setCurrentPage(pageNumber)
-        this.props.setIsFetching(true)
-        axios.get(`https://social-network.samuraijs.com/api/1.0/users?page=${pageNumber}&count=${this.props.pageSize}`, {
-            withCredentials: true,
-        }).then(response => {
-            this.props.setIsFetching(false)
-            this.props.setUsers(response.data.items)
-        })
+        this.props.getUsersThunkCreator(pageNumber, this.props.pageSize)
     }
 
     render() {
@@ -57,11 +41,11 @@ class UsersContainerClass extends React.Component<MyClassUsersProps, RootState> 
                 pageSize={this.props.pageSize}
                 currentPage={this.props.currentPage}
                 users={this.props.users}
+                isDisabled={this.props.isDisabled}
                 onChangePages={this.onChangePages}
-                follow={this.props.follow}
-                unfollow={this.props.unfollow}
+                follow={this.props.followThunkCreator}
+                unfollow={this.props.unfollowThunkCreator}
             />}
-
         </>
     }
 }
@@ -72,30 +56,21 @@ const mapStateToProps = (state: RootState) => {
         pageSize: state.usersPage.pageSize,
         totalUsersCount: state.usersPage.totalUsersCount,
         currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching
+        isFetching: state.usersPage.isFetching,
+        isDisabled: state.usersPage.isDisabledFollow
     }
 }
 
-// const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-//     return {
-//         follow: (userId: number) => dispatch(followAC(userId)),
-//         unfollow: (userId: number) => dispatch(unfollowAC(userId)),
-//         setUsers: (users: UserItemType[]) => dispatch(setUsersAC(users)),
-//         setCurrentPage: (currentPage: number) => dispatch(setCurrentPageAC(currentPage)),
-//         setTotalUsersCount: (totalCount: number) => dispatch(setTotalCountAC(totalCount)),
-//         setIsFetching: (isFetch: boolean) => dispatch(setIsFetchingtAC(isFetch))
-//     }
-// }
 
 // если вы передаете в connect вторым аргументом не mapDispatchToProps, а объект с AC,
 //  то connect оборачивает ваши AC в функцию-обертку () => store.dispatch(AC) и 
 // передаёт в props компонента
 
+
 export const UsersContainer = connect(mapStateToProps, {
-    follow,
-    unfollow,
-    setUsers,
-    setCurrentPage,
-    setTotalCount,
-    setIsFetching
+    unfollowThunkCreator,
+    followThunkCreator,
+    setIsFetching,
+    setDisabledFollow,
+    getUsersThunkCreator
 })(UsersContainerClass)

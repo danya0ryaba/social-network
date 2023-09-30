@@ -1,27 +1,21 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DataItemType, setAuthUserData } from '../../redux/auth-reducer'
+import { DataItemType, GetAuthUserDataType, getAuthUserData } from '../../redux/auth-reducer'
 import { Header } from './Header'
-import axios from 'axios'
 import { RootState } from '../../redux/redux-store'
+import { authAPI } from '../../DAL/api'
 
 export type HeaderContainerPropsType = {
-    setAuthUserData: (obj: DataItemType) => void
+    getAuthUserData: any
     isAut: boolean
     login: string
 }
 
 class HeaderContainer extends React.Component<HeaderContainerPropsType> {
     componentDidMount(): void {
-        try {
-            axios.get('https://social-network.samuraijs.com/api/1.0/auth/me', {
-                withCredentials: true
-            }).then(response => {
-                if (response.data.resultCode === 0) this.props.setAuthUserData(response.data.data)
-            })
-        } catch (error) {
-            console.log(error);
-        }
+        // не понятно нахуя я прокидываю через пропсы,
+        //  хотя в ProfileContainer если не прокидываю то хуйня получается
+        this.props.getAuthUserData()
     }
 
     render() {
@@ -35,4 +29,4 @@ const mapStateToProps = (state: RootState) => ({
 
 })
 
-export default connect(mapStateToProps, { setAuthUserData })(HeaderContainer)
+export default connect(mapStateToProps, { getAuthUserData })(HeaderContainer)
