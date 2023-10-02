@@ -1,9 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { DataItemType, GetAuthUserDataType, getAuthUserData } from '../../redux/auth-reducer'
+import { getAuthUserData } from '../../redux/auth-reducer'
 import { Header } from './Header'
 import { RootState } from '../../redux/redux-store'
-import { authAPI } from '../../DAL/api'
 
 export type HeaderContainerPropsType = {
     getAuthUserData: any

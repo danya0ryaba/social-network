@@ -6,11 +6,12 @@ import { News } from './COMPONENTS/news/News';
 import { Music } from './COMPONENTS/music/Music';
 import { Settings } from './COMPONENTS/settings/Settings';
 import { Routes, Route } from 'react-router-dom';
-import { DialogsContainer } from './COMPONENTS/dialogs/DialogsContainer';
 import { MyContext } from '.';
-import { UsersContainer } from './COMPONENTS/users/UsersContainer';
 import ProfileContainer from './COMPONENTS/profile/ProfileContainer';
 import HeaderContainer from './COMPONENTS/header/HeaderContainer';
+import { Login } from './COMPONENTS/login/Login';
+import DialogsContainer from './COMPONENTS/dialogs/DialogsContainer';
+import UsersContainer from './COMPONENTS/users/UsersContainer';
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="news" element={<News />} />
           <Route path="music" element={<Music />} />
           <Route path="settings" element={<Settings />} />
+          <Route path='login' element={<Login />} />
         </Routes>
       </PageDialogs>
 

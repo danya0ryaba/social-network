@@ -18,7 +18,13 @@ export type DataItemType = {
 }
 // ================= ТИПИЗАЦИЯ ДЛЯ ACTION =================//
 
-type ActionType = ReturnType<typeof setAuthUserData>
+type ActionType = AuthUsersDataType
+
+
+type AuthUsersDataType = {
+    type: 'SET_USER_DATA'
+    data: any
+}
 
 const initialState: initialStateType = {
     "data": {
@@ -32,7 +38,7 @@ const initialState: initialStateType = {
     "isAuth": false
 }
 
-export const authReducer = (state: initialStateType = initialState, action: ActionType) => {
+export const authReducer = (state: initialStateType = initialState, action: any) => {
     switch (action.type) {
         case SET_USER_DATA:
             return { ...state, ...action.data, isAuth: true }
@@ -42,6 +48,8 @@ export const authReducer = (state: initialStateType = initialState, action: Acti
 }
 
 export const setAuthUserData = (data: DataItemType) => ({ type: SET_USER_DATA, data })
+
+
 
 
 export type GetAuthUserDataType = ReturnType<typeof getAuthUserData>

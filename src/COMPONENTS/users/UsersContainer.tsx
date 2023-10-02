@@ -4,6 +4,8 @@ import { RootState } from '../../redux/redux-store';
 import React from 'react';
 import { Users } from './Users';
 import { Preloader } from '../common/preloader/Preloader';
+import { AuthRedirect } from '../HOC/AuthRedirect';
+import { compose } from "redux";
 
 // дял типизиции класса (class UsersClass extends React.Component<{}, {}>) этой строки используются 2 параметра
 // 1 это типизация пропсов
@@ -61,16 +63,18 @@ const mapStateToProps = (state: RootState) => {
     }
 }
 
-
 // если вы передаете в connect вторым аргументом не mapDispatchToProps, а объект с AC,
 //  то connect оборачивает ваши AC в функцию-обертку () => store.dispatch(AC) и 
 // передаёт в props компонента
 
 
-export const UsersContainer = connect(mapStateToProps, {
-    unfollowThunkCreator,
-    followThunkCreator,
-    setIsFetching,
-    setDisabledFollow,
-    getUsersThunkCreator
-})(UsersContainerClass)
+export default compose(
+    connect(mapStateToProps, {
+        unfollowThunkCreator,
+        followThunkCreator,
+        setIsFetching,
+        setDisabledFollow,
+        getUsersThunkCreator
+    }),
+    AuthRedirect
+)(UsersContainerClass)
