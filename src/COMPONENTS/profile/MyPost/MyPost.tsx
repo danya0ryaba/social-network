@@ -1,14 +1,12 @@
-import { ChangeEvent } from "react";
 import { S } from './mypost_style'
 import { Post } from "./Post/Post";
 import { PostItemType } from "../../../redux/profile-reducer";
+import { Field, Formik, Form } from "formik";
 
 
 type PropsType = {
-    updateNewPostText: (text: string) => void
-    addPost: () => void
+    addPost: (post: string) => void
     posts: Array<PostItemType>
-    newPostText: string
 }
 
 export const MyPost = (props: PropsType) => {
@@ -16,23 +14,36 @@ export const MyPost = (props: PropsType) => {
     const renderPostData = props.posts.map(elem => <Post key={elem.id}
         message={elem.message} like={elem.like} />)
 
-    const onPostChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        let text = e.currentTarget.value
-        props.updateNewPostText(text)
-    }
-    const onAddPost = () => props.addPost()
-
+    const onAddPostHandler = (value: string) => props.addPost(value)
 
     return (
         <S.MyPostWrapper>
             <h3>My Post</h3>
             <div>
-                <div><textarea value={props.newPostText} onChange={onPostChange} /></div>
-                <button onClick={onAddPost}>add post</button>
+                <MyPostForm onAddPostHandler={onAddPostHandler} />
             </div>
             <div>
                 {renderPostData}
             </div>
         </S.MyPostWrapper >
     )
+}
+
+type MyPostFormType = {
+    onAddPostHandler: (value: string) => void
+}
+const MyPostForm: React.FC<MyPostFormType> = ({ onAddPostHandler }) => {
+    return <>
+        <Formik initialValues={{ mypost: '' }}
+            onSubmit={value => onAddPostHandler(value.mypost)}>
+            {({ errors, touched }) => (<Form>
+                <label htmlFor="post">my post</label>
+                <Field component="textarea" id="post" name="mypost" />
+                <div>
+                    <button type="submit">опубликовать</button>
+                </div>
+            </Form>)}
+
+        </Formik>
+    </>
 }

@@ -1,16 +1,15 @@
-import React, { ChangeEvent } from "react";
+import React from "react";
 import { S } from './dialogs_style'
 import { DialogItem } from "./dialogitem/DialogItem";
 import { Message } from "./message/Message";
-import { NavLink, Navigate, Route } from "react-router-dom";
-import { Login } from "../login/Login";
+import { Navigate } from "react-router-dom";
+import { Form, Formik, Field } from "formik";
 
 
 type PropsType = {
-    updateNewMessage: (body: string) => void
     dialogsPage: any
     isAuth: boolean
-    sendMessageClick: () => void
+    sendMessageClick: (value: string) => void
 }
 type DialogsItemType = {
     name: string
@@ -29,26 +28,39 @@ export const Dialogs = (props: PropsType) => {
     let renderDialogsItem = props.dialogsPage.dialogs.map((elem: DialogsItemType) => <DialogItem key={elem.id_to} name={elem.name} id_to={elem.id_to} />)
     let renderMessageItem = props.dialogsPage.messages.map((elem: MessagesItemType) => <Message key={elem.id} message={elem.message} />)
 
-    const onSendMessageClick = () => props.sendMessageClick()
+    const onSendMessageClick = (value: string) => props.sendMessageClick(value)
 
-
-    const onNewMeessageChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-        const body = e.currentTarget.value
-        props.updateNewMessage(body)
-    }
     return (
         <S.DialogsWrapper>
+
             <S.DialogsItem>
                 {renderDialogsItem}
             </S.DialogsItem>
 
             <S.Messages>
                 {renderMessageItem}
-
-                <textarea value={props.dialogsPage.newMessageBody} onChange={onNewMeessageChange} />
-
-                <button onClick={onSendMessageClick}>send</button>
+                <FormDialog onSendMessageClick={onSendMessageClick} />
             </S.Messages>
+
         </S.DialogsWrapper >
     )
+}
+
+
+
+type FormDialogType = {
+    onSendMessageClick: (value: string) => void
+}
+const FormDialog: React.FC<FormDialogType> = ({ onSendMessageClick }) => {
+    return (<div>
+        <Formik initialValues={{ message: '' }} onSubmit={value => onSendMessageClick(value.message)}>
+            {({ errors, touched }) => (<Form>
+                <label htmlFor="message">Введите текст</label>
+                <Field component="textarea" name="message" id="message" />
+                <div>
+                    <button type="submit">отправить</button>
+                </div>
+            </Form>)}
+        </Formik>
+    </div>)
 }

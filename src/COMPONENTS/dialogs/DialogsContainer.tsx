@@ -10,8 +10,8 @@ const mapStateToProps = (state: RootState) => ({ dialogsPage: state.dialogsPage 
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     return {
-        updateNewMessage: (body: string) => { dispatch(updateNewMeessageBodyCreator(body)) },
-        sendMessageClick: () => { dispatch(sendMessageCreator()) }
+        // updateNewMessage: (body: string) => { dispatch(updateNewMeessageBodyCreator(body)) },
+        sendMessageClick: (value: string) => { dispatch(sendMessageCreator(value)) }
     }
 }
 

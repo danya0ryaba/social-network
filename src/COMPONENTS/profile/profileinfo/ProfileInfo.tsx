@@ -2,9 +2,10 @@ import React from "react";
 import { S } from './profileinfo_style'
 import { ProfilePropsType } from "../Profile";
 import { Preloader } from "../../common/preloader/Preloader";
+import { ProfileStatus } from "./ProfileStatus";
 
 
-export const ProfileInfo: React.FC<ProfilePropsType> = ({ profile }) => {
+export const ProfileInfo: React.FC<ProfilePropsType> = ({ profile, updateStatus, status }) => {
 
     if (!profile) return <Preloader />
 
@@ -24,6 +25,8 @@ export const ProfileInfo: React.FC<ProfilePropsType> = ({ profile }) => {
                     return <li key={index}>{el} - <span>{profile.contacts[el]}</span></li>
                 })}
             </ul>
+
+            <ProfileStatus status={status} updateStatus={updateStatus} />
 
         </div>
     )
