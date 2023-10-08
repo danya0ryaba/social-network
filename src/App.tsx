@@ -9,9 +9,9 @@ import { Routes, Route } from 'react-router-dom';
 import { MyContext } from '.';
 import ProfileContainer from './COMPONENTS/profile/ProfileContainer';
 import HeaderContainer from './COMPONENTS/header/HeaderContainer';
-import { Login } from './COMPONENTS/login/Login';
 import DialogsContainer from './COMPONENTS/dialogs/DialogsContainer';
 import UsersContainer from './COMPONENTS/users/UsersContainer';
+import Login from './COMPONENTS/login/Login';
 
 
 const App = () => {

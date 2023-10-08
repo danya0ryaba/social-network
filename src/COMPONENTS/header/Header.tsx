@@ -10,7 +10,8 @@ export const Header: React.FC<HeaderContainerPropsType> = (props) => {
         <S.Header>
             <img src="https://www.designevo.com/res/templates/thumb_small/brown-circle-and-chocolate-coffee.webp?v=1.0.0.2" alt="" />
 
-            {props.isAut ? props.login
+            {props.isAuth ?
+                <span>{props.login} - <button onClick={props.logout}>Log out</button></span>
                 : <NavLink to={"/"}>
                     <S.MyDiv>LOGIN</S.MyDiv>
                 </NavLink>}

@@ -1,9 +1,8 @@
-import React from "react";
 import { S } from './dialogs_style'
 import { DialogItem } from "./dialogitem/DialogItem";
 import { Message } from "./message/Message";
 import { Navigate } from "react-router-dom";
-import { Form, Formik, Field } from "formik";
+import { FormDialog } from "./FormDialog";
 
 
 type PropsType = {
@@ -30,37 +29,16 @@ export const Dialogs = (props: PropsType) => {
 
     const onSendMessageClick = (value: string) => props.sendMessageClick(value)
 
-    return (
-        <S.DialogsWrapper>
-
-            <S.DialogsItem>
-                {renderDialogsItem}
-            </S.DialogsItem>
-
-            <S.Messages>
-                {renderMessageItem}
-                <FormDialog onSendMessageClick={onSendMessageClick} />
-            </S.Messages>
-
-        </S.DialogsWrapper >
-    )
+    return <S.DialogsWrapper>
+        <S.DialogsItem>
+            {renderDialogsItem}
+        </S.DialogsItem>
+        <S.Messages>
+            {renderMessageItem}
+            <FormDialog onSendMessageClick={onSendMessageClick} />
+        </S.Messages>
+    </S.DialogsWrapper >
 }
 
 
 
-type FormDialogType = {
-    onSendMessageClick: (value: string) => void
-}
-const FormDialog: React.FC<FormDialogType> = ({ onSendMessageClick }) => {
-    return (<div>
-        <Formik initialValues={{ message: '' }} onSubmit={value => onSendMessageClick(value.message)}>
-            {({ errors, touched }) => (<Form>
-                <label htmlFor="message">Введите текст</label>
-                <Field component="textarea" name="message" id="message" />
-                <div>
-                    <button type="submit">отправить</button>
-                </div>
-            </Form>)}
-        </Formik>
-    </div>)
-}

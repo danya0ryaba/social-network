@@ -24,8 +24,8 @@ export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
     getStatus,
     status
 }) => {
-
     let { userId } = useParams()
+    // меня редиректит сюда потому что userId захардкожен (userId = '2')
     if (!userId) userId = '2'
     // 29605
     useEffect(() => {
@@ -34,7 +34,6 @@ export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
             getStatus(userId)
         }
     }, [userId])
-
     return <div className='content'>
         <Profile updateStatus={updateStatus} profile={profile} status={status} />
     </div>

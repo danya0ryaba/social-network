@@ -1,7 +1,7 @@
 import { S } from './mypost_style'
 import { Post } from "./Post/Post";
 import { PostItemType } from "../../../redux/profile-reducer";
-import { Field, Formik, Form } from "formik";
+import { MyPostForm } from './MyPostForm';
 
 
 type PropsType = {
@@ -20,30 +20,11 @@ export const MyPost = (props: PropsType) => {
         <S.MyPostWrapper>
             <h3>My Post</h3>
             <div>
-                <MyPostForm onAddPostHandler={onAddPostHandler} />
+                <MyPostForm addPost={onAddPostHandler} />
             </div>
             <div>
                 {renderPostData}
             </div>
         </S.MyPostWrapper >
     )
-}
-
-type MyPostFormType = {
-    onAddPostHandler: (value: string) => void
-}
-const MyPostForm: React.FC<MyPostFormType> = ({ onAddPostHandler }) => {
-    return <>
-        <Formik initialValues={{ mypost: '' }}
-            onSubmit={value => onAddPostHandler(value.mypost)}>
-            {({ errors, touched }) => (<Form>
-                <label htmlFor="post">my post</label>
-                <Field component="textarea" id="post" name="mypost" />
-                <div>
-                    <button type="submit">опубликовать</button>
-                </div>
-            </Form>)}
-
-        </Formik>
-    </>
 }
