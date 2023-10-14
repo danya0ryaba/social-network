@@ -4,7 +4,7 @@ import { ProfilePropsType } from '../Profile'
 type ProfileStatusPropsType = Omit<ProfilePropsType, 'profile'>
 
 export class ProfileStatus extends React.Component<ProfileStatusPropsType> {
-    // ОШИБКА ПРИ ПОПЫТКИ ПОМЕНЯТЬ STATUS
+
     state = {
         editMode: false,
         status: this.props.status

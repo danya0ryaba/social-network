@@ -1,47 +1,40 @@
-import React from 'react';
 import styled from 'styled-components';
-import './App.css';
 import { Navbar } from './COMPONENTS/navbar/Navbar';
 import { News } from './COMPONENTS/news/News';
 import { Music } from './COMPONENTS/music/Music';
 import { Settings } from './COMPONENTS/settings/Settings';
 import { Routes, Route } from 'react-router-dom';
-import { MyContext } from '.';
 import ProfileContainer from './COMPONENTS/profile/ProfileContainer';
 import HeaderContainer from './COMPONENTS/header/HeaderContainer';
 import DialogsContainer from './COMPONENTS/dialogs/DialogsContainer';
 import UsersContainer from './COMPONENTS/users/UsersContainer';
 import Login from './COMPONENTS/login/Login';
+import { store_redux } from './redux/redux-store';
 
 
-const App = () => {
+// Я НЕ СМОГ РАЗОБРАТЬСЯ В 80 УРОКЕ
+// ОТ ТУДА APP-REDUCER
+// Я ОСТАВИЛ ЗАПРОС О АУТЕНТИФИКАЦИИ В HEADER(componentDidMount)
 
-  const state = React.useContext(MyContext)
-
-  return (
+export const App = () => {
+  return (<div>
     <WrapperContent>
-
       <HeaderContainer />
-
       <Navbar />
-      {/* не уверен что нужен ? после profile , но тогда не грузить profile без userId */}
       <PageDialogs>
         <Routes>
           <Route path="/profile?/:userId?" element={<ProfileContainer />} />
-          <Route path="dialogs/*" element={<DialogsContainer store={state} />} />
-          <Route path="users" element={<UsersContainer store={state} />} />
+          <Route path="dialogs/*" element={<DialogsContainer store={store_redux} />} />
+          <Route path="users" element={<UsersContainer store={store_redux} />} />
           <Route path="news" element={<News />} />
           <Route path="music" element={<Music />} />
           <Route path="settings" element={<Settings />} />
           <Route path='login' element={<Login />} />
         </Routes>
       </PageDialogs>
-
     </WrapperContent>
-  );
+  </div>);
 }
-
-export default App;
 
 const WrapperContent = styled.div`
   a{text-decoration: none;}

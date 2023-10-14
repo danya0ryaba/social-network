@@ -8,11 +8,10 @@ import { AuthRedirect } from '../HOC/AuthRedirect';
 
 const mapStateToProps = (state: RootState) => ({ dialogsPage: state.dialogsPage })
 
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
-    return {
-        sendMessageClick: (value: string) => { dispatch(sendMessageCreator(value)) }
-    }
-}
+const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => ({
+    sendMessageClick: (value: string) => { dispatch(sendMessageCreator(value)) }
+})
+
 
 export default compose(
     connect(mapStateToProps, mapDispatchToProps),

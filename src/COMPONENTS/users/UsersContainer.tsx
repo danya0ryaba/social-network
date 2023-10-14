@@ -6,6 +6,7 @@ import { Users } from './Users';
 import { Preloader } from '../common/preloader/Preloader';
 import { AuthRedirect } from '../HOC/AuthRedirect';
 import { compose } from "redux";
+import { getCurrentPage, getIsDisabled, getIsFetching, getPageSize, getTotalUsersCount, getUsers } from '../../redux/selectors/users-selectors';
 
 // дял типизиции класса (class UsersClass extends React.Component<{}, {}>) этой строки используются 2 параметра
 // 1 это типизация пропсов
@@ -52,16 +53,14 @@ class UsersContainerClass extends React.Component<MyClassUsersProps, RootState> 
     }
 }
 
-const mapStateToProps = (state: RootState) => {
-    return {
-        users: state.usersPage.users,
-        pageSize: state.usersPage.pageSize,
-        totalUsersCount: state.usersPage.totalUsersCount,
-        currentPage: state.usersPage.currentPage,
-        isFetching: state.usersPage.isFetching,
-        isDisabled: state.usersPage.isDisabledFollow
-    }
-}
+const mapStateToProps = (state: RootState) => ({
+    users: getUsers(state),
+    pageSize: getPageSize(state),
+    totalUsersCount: getTotalUsersCount(state),
+    currentPage: getCurrentPage(state),
+    isFetching: getIsFetching(state),
+    isDisabled: getIsDisabled(state)
+})
 
 // если вы передаете в connect вторым аргументом не mapDispatchToProps, а объект с AC,
 //  то connect оборачивает ваши AC в функцию-обертку () => store.dispatch(AC) и 

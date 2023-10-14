@@ -1,5 +1,6 @@
 import { Dispatch, AnyAction } from 'redux';
 import { usersAPI } from "../DAL/api"
+import { followOrUnfollow } from '../utils/object-helpers';
 
 const FOLLOW = 'FOLLOW'
 const UNFOLLOW = 'UNFOLLOW'
@@ -42,11 +43,11 @@ const initialState: UsersType = {
 }
 
 // =========== ТИПИЗАЦИЯ НА ACTION =========== //
-type FollowACType = {
+export type FollowACType = {
     type: 'FOLLOW',
     userId: number
 }
-type UnollowACType = {
+export type UnollowACType = {
     type: 'UNFOLLOW',
     userId: number
 }
@@ -79,14 +80,17 @@ export const usersReducer = (state: UsersType = initialState, action: ActionsTyp
         case FOLLOW:
             return {
                 ...state,
-                users: state.users.map(user => user.id === action.userId ?
-                    { ...user, followed: true } : user)
+                users: followOrUnfollow(state.users, action.userId, "id", { followed: true })
             }
         case UNFOLLOW:
+            // return {
+            //     ...state,
+            //     users: state.users.map(user => user.id === action.userId ?
+            //         { ...user, followed: false } : user)
+            // }
             return {
                 ...state,
-                users: state.users.map(user => user.id === action.userId ?
-                    { ...user, followed: false } : user)
+                users: followOrUnfollow(state.users, action.userId, "id", { followed: false })
             }
         case SET_USERS:
             return { ...state, users: action.users }
@@ -120,42 +124,28 @@ export const setDisabledFollow = (isFetching: boolean, id: number): SetDisabledF
 
 
 // ================= THUNK REDUX ================= //
-export const getUsersThunkCreator = (currentPage: number, pageSize: number) => {
-    return (dispatch: Dispatch<AnyAction>) => {
-        dispatch(setIsFetching(true))
-        usersAPI.getUsers(currentPage, pageSize).then(response => {
-            dispatch(setIsFetching(false))
-            dispatch(setUsers(response.items))
-            dispatch(setTotalCount(response.totalCount))
-        })
-    }
+export const getUsersThunkCreator = (currentPage: number, pageSize: number) => async (dispatch: Dispatch<AnyAction>) => {
+    dispatch(setIsFetching(true))
+    dispatch(setCurrentPage(currentPage))
+    const response = await usersAPI.getUsers(currentPage, pageSize);
+    dispatch(setIsFetching(false))
+    dispatch(setUsers(response.items))
+    dispatch(setTotalCount(response.totalCount))
 }
 
-
-export const followThunkCreator = (userId: number) => {
-
-    return (dispatch: Dispatch<AnyAction>) => {
-        dispatch(setDisabledFollow(true, userId))
-        usersAPI.follow(userId).then(response => {
-            if (response.data.resultCode == 0) {
-                dispatch(acceptFollow(userId))
-            }
-            dispatch(setDisabledFollow(false, userId))
-        })
-    }
-
+export const followUnfollowFlow = async (dispatch: Dispatch<AnyAction>, userId: number,
+    apiMethod: any, actionCreator: (userId: number) => AnyAction) => {
+    dispatch(setDisabledFollow(true, userId))
+    const response = await apiMethod(userId);
+    if (response.data.resultCode == 0) dispatch(actionCreator(userId))
+    dispatch(setDisabledFollow(false, userId))
 }
 
-export const unfollowThunkCreator = (userId: number) => {
-
-    return (dispatch: Dispatch<AnyAction>) => {
-        dispatch(setDisabledFollow(true, userId))
-        usersAPI.unfollow(userId).then(response => {
-            if (response.data.resultCode == 0) {
-                dispatch(acceptUnfollow(userId))
-            }
-            dispatch(setDisabledFollow(false, userId))
-        })
-    }
-
+export const followThunkCreator = (userId: number) => async (dispatch: Dispatch<AnyAction>) => {
+    followUnfollowFlow(dispatch, userId, usersAPI.follow.bind(userId), acceptFollow)
 }
+
+export const unfollowThunkCreator = (userId: number) => async (dispatch: Dispatch<AnyAction>) => {
+    followUnfollowFlow(dispatch, userId, usersAPI.unfollow.bind(userId), acceptUnfollow)
+}
+

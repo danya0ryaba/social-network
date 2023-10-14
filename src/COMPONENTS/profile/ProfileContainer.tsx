@@ -14,7 +14,8 @@ type ProfileContainerPropsType = {
     getUserStatus: any
     updateStatus: (status: string) => void
     getStatus: (userId: string) => void
-    status: string
+    status: string,
+    isAuthIdUser: string
 }
 
 export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
@@ -22,12 +23,11 @@ export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
     profile,
     updateStatus,
     getStatus,
-    status
+    status,
+    isAuthIdUser
 }) => {
     let { userId } = useParams()
-    // меня редиректит сюда потому что userId захардкожен (userId = '2')
-    if (!userId) userId = '2'
-    // 29605
+    if (!userId) userId = isAuthIdUser
     useEffect(() => {
         if (userId) {
             getUserProfile(userId);
@@ -41,7 +41,8 @@ export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
 
 const mapStateToProps = (state: RootState) => ({
     profile: state.profilePage.profile,
-    status: state.profilePage.status
+    status: state.profilePage.status,
+    isAuthIdUser: state.auth.data.id
 })
 
 export default compose<React.ComponentType>(
