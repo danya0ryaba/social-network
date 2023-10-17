@@ -5,16 +5,15 @@ import { IsDisabletType, UserItemType } from '../../redux/users-reducer'
 import userPhoto from '../../assets/users/984126_avatar_male_man_user_person_icon.png'
 
 type UserPropsType = {
-    index: number
     user: UserItemType
     isDisabled: IsDisabletType
     unfollow: (userId: number) => void
     follow: (userId: number) => void
 }
 
-export const User: React.FC<UserPropsType> = ({ index, user, isDisabled, unfollow, follow }) => {
+export const User: React.FC<UserPropsType> = ({ user, isDisabled, unfollow, follow }) => {
 
-    return <div key={index}>
+    return <div key={user.id}>
         <span>
             <div>
                 <NavLink to={`/profile/${user.id}`}>

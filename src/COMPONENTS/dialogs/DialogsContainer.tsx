@@ -1,10 +1,9 @@
-import { Dispatch, AnyAction } from 'redux';
-import { sendMessageCreator, updateNewMeessageBodyCreator } from "../../redux/dialogs-reducer";
 import { Dialogs } from "./Dialogs";
 import { connect } from "react-redux";
-import { compose } from "redux";
-import { RootState } from '../../redux/redux-store';
 import { AuthRedirect } from '../HOC/AuthRedirect';
+import { RootState } from '../../redux/redux-store';
+import { Dispatch, AnyAction, compose } from 'redux';
+import { sendMessageCreator } from "../../redux/dialogs-reducer";
 
 const mapStateToProps = (state: RootState) => ({ dialogsPage: state.dialogsPage })
 

@@ -5,17 +5,17 @@ import { MyPostForm } from './MyPostForm';
 import React from 'react';
 
 
-type PropsType = {
+export type PropsType = {
     addPost: (post: string) => void
     posts: Array<PostItemType>
 }
 
-export const MyPost = React.memo((props: PropsType) => {
+export const MyPost: React.FC<PropsType> = React.memo(({ addPost, posts }) => {
 
-    const renderPostData = props.posts.map(elem => <Post key={elem.id}
+    const renderPostData = posts.map(elem => <Post key={elem.id}
         message={elem.message} like={elem.like} />)
 
-    const onAddPostHandler = (value: string) => props.addPost(value)
+    const onAddPostHandler = (value: string) => addPost(value)
 
     return (
         <S.MyPostWrapper>

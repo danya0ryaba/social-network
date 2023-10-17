@@ -1,9 +1,8 @@
+import { PropsType } from "./MyPost"
 import { Field, Form, Formik } from "formik"
 import { validateText } from "../../../utils/validateForm"
 
-type MyPostFormType = {
-    addPost: (value: string) => void
-}
+type MyPostFormType = Omit<PropsType, 'posts'>
 
 export const MyPostForm: React.FC<MyPostFormType> = ({ addPost }) => {
     return <div>
@@ -19,7 +18,6 @@ export const MyPostForm: React.FC<MyPostFormType> = ({ addPost }) => {
                     <button type="submit">опубликовать</button>
                 </div>
             </Form>)}
-
         </Formik>
     </div>
 }

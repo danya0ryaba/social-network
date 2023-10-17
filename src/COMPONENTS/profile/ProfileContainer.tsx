@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react'
-import { RootState } from "../../redux/redux-store";
+import { compose } from "redux";
 import { Profile } from './Profile';
 import { connect } from 'react-redux';
-import { getStatus, getUserProfile, updateStatus } from '../../redux/profile-reducer';
+import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom';
+import { RootState } from "../../redux/redux-store";
 import { AuthRedirect } from '../HOC/AuthRedirect';
-import { compose } from "redux";
+import { ProfileApiSuccssesItem, getStatus, getUserProfile, savePhoto, updateStatus } from '../../redux/profile-reducer';
+
+
+
 
 type ProfileContainerPropsType = {
-    getUserProfile: any
+    getUserProfile: (userId: string) => void
+    savePhoto: any
+    // profile: null | ProfileApiSuccssesItem
     profile: any
     isAuth?: boolean
     getUserStatus: any
@@ -19,23 +24,25 @@ type ProfileContainerPropsType = {
 }
 
 export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
-    getUserProfile,
-    profile,
-    updateStatus,
-    getStatus,
-    status,
-    isAuthIdUser
+    getUserProfile, profile, updateStatus, getStatus, status, isAuthIdUser
 }) => {
     let { userId } = useParams()
+
     if (!userId) userId = isAuthIdUser
+
     useEffect(() => {
         if (userId) {
             getUserProfile(userId);
             getStatus(userId)
         }
     }, [userId])
+
     return <div className='content'>
-        <Profile updateStatus={updateStatus} profile={profile} status={status} />
+        <Profile savePhoto={savePhoto}
+            isOwner={!!userId}
+            updateStatus={updateStatus}
+            profile={profile}
+            status={status} />
     </div>
 }
 
@@ -46,7 +53,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { getUserProfile, getStatus, updateStatus }),
+    connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto }),
     AuthRedirect
 )(ProfileContainer)
 

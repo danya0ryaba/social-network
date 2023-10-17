@@ -1,37 +1,30 @@
 import React from 'react'
 import { User } from './User'
+import { MyClassUsersProps } from './UsersContainer'
+import { UserItemType } from '../../redux/users-reducer'
 import { Pagination } from '../common/pagination/Pagination'
-import { IsDisabletType, UserItemType } from '../../redux/users-reducer'
 
-
-type UsersPropsType = {
-    users: UserItemType[]
-    totalUsersCount: number
-    pageSize: number
-    currentPage: number
-    isDisabled: IsDisabletType
-    onChangePages: (pageNumber: number) => void
-    follow: (userId: number) => void
-    unfollow: (userId: number) => void
-}
+type UsersPropsType = Omit<MyClassUsersProps, 'isFetching' | 'setIsFetching' |
+    'setDisabledFollow' | 'getUsersThunkCreator'> & { onChangePages: (pageNumber: number) => void }
 
 export const Users: React.FC<UsersPropsType> = ({
-    totalUsersCount,
-    pageSize,
-    currentPage,
     users,
+    pageSize,
     isDisabled,
+    currentPage,
     onChangePages,
-    follow,
-    unfollow,
+    totalUsersCount,
+    followThunkCreator,
+    unfollowThunkCreator,
 }) => {
     return <div>
-        <Pagination totalUsersCount={totalUsersCount} pageSize={pageSize} onChangePages={onChangePages} />
-        {users.map((user: UserItemType, index: number) => <User
-            index={index}
+        <Pagination currentPage={currentPage} portionSize={10}
+            totalUsersCount={totalUsersCount} pageSize={pageSize} onChangePages={onChangePages} />
+        {users.map((user: UserItemType) => <User
             user={user}
+            key={user.id}
             isDisabled={isDisabled}
-            unfollow={unfollow}
-            follow={follow} />)}
+            unfollow={unfollowThunkCreator}
+            follow={followThunkCreator} />)}
     </div>
 }

@@ -13,7 +13,7 @@ import { getCurrentPage, getIsDisabled, getIsFetching, getPageSize, getTotalUser
 // 2 это типизация state
 
 // можно создать type на основе типа, который лежит в редьюсере
-interface MyClassUsersProps {
+export interface MyClassUsersProps {
     users: UserItemType[]
     pageSize: number
     totalUsersCount: number
@@ -22,9 +22,9 @@ interface MyClassUsersProps {
     isDisabled: IsDisabletType
     setIsFetching: (value: boolean) => void
     setDisabledFollow: (isFetching: boolean, id: number) => void
-    getUsersThunkCreator: any
-    unfollowThunkCreator: any
-    followThunkCreator: any
+    getUsersThunkCreator: (currentPage: number, pageSize: number) => void
+    unfollowThunkCreator: (userId: number) => void
+    followThunkCreator: (userId: number) => void
 }
 
 class UsersContainerClass extends React.Component<MyClassUsersProps, RootState> {
@@ -46,8 +46,8 @@ class UsersContainerClass extends React.Component<MyClassUsersProps, RootState> 
                 users={this.props.users}
                 isDisabled={this.props.isDisabled}
                 onChangePages={this.onChangePages}
-                follow={this.props.followThunkCreator}
-                unfollow={this.props.unfollowThunkCreator}
+                followThunkCreator={this.props.followThunkCreator}
+                unfollowThunkCreator={this.props.unfollowThunkCreator}
             />}
         </>
     }
@@ -65,7 +65,6 @@ const mapStateToProps = (state: RootState) => ({
 // если вы передаете в connect вторым аргументом не mapDispatchToProps, а объект с AC,
 //  то connect оборачивает ваши AC в функцию-обертку () => store.dispatch(AC) и 
 // передаёт в props компонента
-
 
 export default compose(
     connect(mapStateToProps, {

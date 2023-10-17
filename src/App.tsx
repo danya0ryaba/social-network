@@ -1,20 +1,18 @@
+import React, { Suspense } from 'react'
 import styled from 'styled-components';
 import { Navbar } from './COMPONENTS/navbar/Navbar';
-import { News } from './COMPONENTS/news/News';
-import { Music } from './COMPONENTS/music/Music';
-import { Settings } from './COMPONENTS/settings/Settings';
 import { Routes, Route } from 'react-router-dom';
-import ProfileContainer from './COMPONENTS/profile/ProfileContainer';
-import HeaderContainer from './COMPONENTS/header/HeaderContainer';
-import DialogsContainer from './COMPONENTS/dialogs/DialogsContainer';
-import UsersContainer from './COMPONENTS/users/UsersContainer';
-import Login from './COMPONENTS/login/Login';
 import { store_redux } from './redux/redux-store';
+import HeaderContainer from './COMPONENTS/header/HeaderContainer';
+import { Preloader } from './COMPONENTS/common/preloader/Preloader';
 
-
-// Я НЕ СМОГ РАЗОБРАТЬСЯ В 80 УРОКЕ
-// ОТ ТУДА APP-REDUCER
-// Я ОСТАВИЛ ЗАПРОС О АУТЕНТИФИКАЦИИ В HEADER(componentDidMount)
+const DialogsContainer = React.lazy(() => import('./COMPONENTS/dialogs/DialogsContainer'))
+const ProfileContainer = React.lazy(() => import('./COMPONENTS/profile/ProfileContainer'))
+const UsersContainer = React.lazy(() => import('./COMPONENTS/users/UsersContainer'))
+const News = React.lazy(() => import('./COMPONENTS/news/News'))
+const Settings = React.lazy(() => import('./COMPONENTS/settings/Settings'))
+const Music = React.lazy(() => import('./COMPONENTS/music/Music'))
+const Login = React.lazy(() => import('./COMPONENTS/login/Login'))
 
 export const App = () => {
   return (<div>
@@ -22,15 +20,18 @@ export const App = () => {
       <HeaderContainer />
       <Navbar />
       <PageDialogs>
-        <Routes>
-          <Route path="/profile?/:userId?" element={<ProfileContainer />} />
-          <Route path="dialogs/*" element={<DialogsContainer store={store_redux} />} />
-          <Route path="users" element={<UsersContainer store={store_redux} />} />
-          <Route path="news" element={<News />} />
-          <Route path="music" element={<Music />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path='login' element={<Login />} />
-        </Routes>
+        <Suspense fallback={<div><Preloader /></div>}>
+          <Routes>
+            {/* ТИПИЗИРОВАТЬ В  ProfileContainer profile*/}
+            <Route path="/profile?/:userId?" element={<ProfileContainer />} />
+            <Route path="dialogs/*" element={<DialogsContainer store={store_redux} />} />
+            <Route path="users" element={<UsersContainer store={store_redux} />} />
+            <Route path="news" element={<News />} />
+            <Route path="music" element={<Music />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path='login' element={<Login />} />
+          </Routes>
+        </Suspense>
       </PageDialogs>
     </WrapperContent>
   </div>);
@@ -49,3 +50,6 @@ const PageDialogs = styled.div`
   background-color: #1e1c1c;
   color: white;
 `
+
+
+

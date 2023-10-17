@@ -1,7 +1,8 @@
 import React from "react";
 
-export const Music = () => {
+const Music = () => {
     return (
         <h2>Music</h2>
     )
 }
+export default Music

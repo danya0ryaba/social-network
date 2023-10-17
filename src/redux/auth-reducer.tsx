@@ -21,7 +21,7 @@ type ActionType = ReturnType<typeof setAuthUserData>
 
 const initialState: initialStateType = {
     data: {
-        id: 2,
+        id: 29605,
         login: "danyaryaba",
         email: "daniba0@gmail.com"
     },
@@ -45,9 +45,6 @@ export const authReducer = (state: initialStateType = initialState, action: Acti
 
 export const setAuthUserData = (data: DataItemType, isAuth: boolean) => ({ type: SET_USER_DATA, data, isAuth })
 
-// не понятно зачем я написал этот тип ????????
-// export type GetAuthUserDataType = ReturnType<typeof getAuthUserData>
-
 export const getAuthUserData = () => async (dispatch: Dispatch<AnyAction>) => {
     const res = await authAPI.me();
     if (res.data.resultCode === 0) dispatch(setAuthUserData(res.data.data, true))
@@ -59,7 +56,7 @@ export const login = (email: string, password: string, rememberMe: boolean) => a
     else dispatch(setAuthUserData(res.data, false))
 }
 
-export const logout = () => async (dispatch: any) => {
+export const logout = () => async (dispatch: Dispatch<AnyAction>) => {
     const res = await authAPI.logout();
     if (res.data.resultCode === 0) {
         dispatch(setAuthUserData({ id: null, login: null, email: null }, false))

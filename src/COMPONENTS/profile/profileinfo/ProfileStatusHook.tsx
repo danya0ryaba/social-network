@@ -1,10 +1,7 @@
 import React, { ChangeEvent } from 'react'
+import { ProfilePropsType } from '../Profile'
 
-
-type ProfileStatusHookType = {
-    status: any
-    updateStatus: any
-}
+type ProfileStatusHookType = Omit<ProfilePropsType, 'profile' | 'isOwner' | 'savePhoto'>
 
 export const ProfileStatusHook: React.FC<ProfileStatusHookType> = ({ status, updateStatus }) => {
 
@@ -13,9 +10,8 @@ export const ProfileStatusHook: React.FC<ProfileStatusHookType> = ({ status, upd
     React.useEffect(() => {
         setStatusState(status)
     }, [status])
-    const activetEditMode = () => {
-        setEditMode(true)
-    }
+    const activetEditMode = () => setEditMode(true)
+
     const diactivetEditMode = () => {
         setEditMode(false)
         updateStatus(statusState)
@@ -23,22 +19,20 @@ export const ProfileStatusHook: React.FC<ProfileStatusHookType> = ({ status, upd
     const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
         setStatusState(e.currentTarget.value)
     }
-    return (<div>
+    return (<>
         {!editMode ?
-            <div>
+            <span>
                 <span onDoubleClick={activetEditMode}>
                     {status || 'Нет статуса'}
                 </span>
-            </div>
+            </span>
             :
-            <div>
+            <span>
                 <input value={statusState}
                     onChange={onStatusChange}
                     autoFocus onBlur={diactivetEditMode}
                     type="text" />
-            </div>
+            </span>
         }
-    </div >
-    )
-
+    </ >)
 }
