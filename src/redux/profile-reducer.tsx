@@ -115,23 +115,27 @@ export const savePhotoSuccsses = (photos: any) => ({ type: 'SAVE_PHOTO_SUCCESS',
 
 export const setStatus = (status: string) => ({ type: SET_STATUS, status })
 
-
 export const getUserProfile = (userId: string) => async (dispatch: Dispatch<AnyAction>) => {
     const resp = await usersAPI.getProfile(userId);
     dispatch(setUserProfile(resp.data))
 }
-
 export const getStatus = (userId: string) => async (dispatch: Dispatch<AnyAction>) => {
     const resp = await profileAPI.getStatus(userId);
     dispatch(setStatus(resp.data))
 }
-
 export const updateStatus = (status: string) => async (dispatch: Dispatch<AnyAction>) => {
     const resp = await profileAPI.updateStatus(status);
     if (resp.data.resultCode === 0) dispatch(setStatus(status))
 }
-
 export const savePhoto = (file: any) => async (dispatch: Dispatch<AnyAction>) => {
     const resp = await profileAPI.savePhoto(file)
     if (resp.data.resultCode === 0) dispatch(savePhotoSuccsses(resp.data.data.photos))
+}
+
+// @ts-ignore
+export const saveChangedProfile = (obj) => async (dispatch, getState) => {
+    const userId = getState().auth.id
+    const resp = await profileAPI.onSave(obj)
+    if (resp.data.resultCode === 0) dispatch(getUserProfile(userId))
+    else alert('Error')
 }

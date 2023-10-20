@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react'
 import { ProfilePropsType } from '../Profile'
 
-type ProfileStatusHookType = Omit<ProfilePropsType, 'profile' | 'isOwner' | 'savePhoto'>
+type ProfileStatusHookType = Omit<ProfilePropsType, 'profile' | 'isOwner' | 'savePhoto' | 'onSave'>
 
 export const ProfileStatusHook: React.FC<ProfileStatusHookType> = ({ status, updateStatus }) => {
 

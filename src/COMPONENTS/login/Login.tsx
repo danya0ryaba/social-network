@@ -9,7 +9,8 @@ import { RootState } from '../../redux/redux-store'
 type LoginPropsType = {
     isAuth: boolean
     messageError: string[]
-    login: (email: string, password: string, rememberMe: boolean) => void
+    captchaUrl: any
+    login: (email: string, password: string, rememberMe: boolean, captchaValue: string) => void
 }
 
 const Login: React.FC<LoginPropsType> = (props) => {
@@ -18,11 +19,12 @@ const Login: React.FC<LoginPropsType> = (props) => {
 }
 
 export const LoginFormWithFormik = (props: LoginPropsType) => {
+
     return <div>
         <h1>Login</h1>
 
-        <Formik initialValues={{ email: '', password: '', remember: false }}
-            onSubmit={value => props.login(value.email, value.password, value.remember)}>
+        <Formik initialValues={{ email: '', password: '', remember: false, captchaValue: '' }}
+            onSubmit={value => props.login(value.email, value.password, value.remember, value.captchaValue)}>
             {({ errors, touched, handleReset }) => (
                 <Form>
                     <div>
@@ -39,6 +41,9 @@ export const LoginFormWithFormik = (props: LoginPropsType) => {
                         <Field id="remember" name='remember' type="checkbox" />
                     </div>
                     {props.messageError.length > 0 ? <div>{props.messageError[0]}</div> : false}
+
+                    {props.captchaUrl && <img src={props.captchaUrl} />}
+                    {props.captchaUrl && <Field name='captchaValue' type="text" />}
                     <button type='submit'>SUBMIT</button>
                 </Form>)}
         </Formik >
@@ -47,6 +52,7 @@ export const LoginFormWithFormik = (props: LoginPropsType) => {
 
 const mapStateToProps = (state: RootState) => ({
     isAuth: state.auth.isAuth,
+    captchaUrl: state.auth.captcha,
     messageError: state.auth.messages
 })
 

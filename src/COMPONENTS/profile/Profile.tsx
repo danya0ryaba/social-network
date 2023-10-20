@@ -1,10 +1,9 @@
 import { ProfileInfo } from "./profileinfo/ProfileInfo";
 import { MyPostContainer } from "./MyPost/MyPostContainer";
-import { ProfileApiSuccssesItem } from "../../redux/profile-reducer";
 
 export type ProfilePropsType = {
+    onSave: any
     savePhoto: any
-    // profile: null | ProfileApiSuccssesItem
     isOwner: boolean
     profile: any
     status: string
@@ -12,6 +11,7 @@ export type ProfilePropsType = {
 }
 
 export const Profile: React.FC<ProfilePropsType> = (props) => {
+    // console.log(props.onSave);
 
     return (
         <div className='content'>

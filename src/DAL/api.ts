@@ -27,7 +27,6 @@ export const usersAPI = {
 
 }
 
-
 export const profileAPI = {
 
     getProfile(userId: string) {
@@ -50,6 +49,10 @@ export const profileAPI = {
                 'Content-Type': 'multipart/form-data'
             }
         })
+    },
+
+    onSave(obj: any) {
+        return instance.put(`profile`, obj)
     }
 }
 
@@ -59,12 +62,18 @@ export const authAPI = {
         return instance.get('auth/me')
     },
 
-    login(email: string, password: string, rememberMe: boolean = false) {
-        return instance.post('auth/login', { email, password, rememberMe })
+    login(email: string, password: string, rememberMe: boolean = false, captcha: any) {
+        return instance.post('auth/login', { email, password, rememberMe, captcha })
     },
 
     logout() {
         return instance.delete('auth/login')
     }
 
+}
+
+export const securityAPI = {
+    getCaptcha() {
+        return instance.get('security/get-captcha-url')
+    }
 }

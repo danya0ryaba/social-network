@@ -5,26 +5,24 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import { RootState } from "../../redux/redux-store";
 import { AuthRedirect } from '../HOC/AuthRedirect';
-import { ProfileApiSuccssesItem, getStatus, getUserProfile, savePhoto, updateStatus } from '../../redux/profile-reducer';
-
-
+import { getStatus, getUserProfile, saveChangedProfile, savePhoto, updateStatus } from '../../redux/profile-reducer';
 
 
 type ProfileContainerPropsType = {
     getUserProfile: (userId: string) => void
     savePhoto: any
-    // profile: null | ProfileApiSuccssesItem
     profile: any
     isAuth?: boolean
     getUserStatus: any
     updateStatus: (status: string) => void
+    saveChangedProfile: any
     getStatus: (userId: string) => void
     status: string,
     isAuthIdUser: string
 }
 
 export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
-    getUserProfile, profile, updateStatus, getStatus, status, isAuthIdUser
+    getUserProfile, profile, updateStatus, getStatus, status, isAuthIdUser, saveChangedProfile
 }) => {
     let { userId } = useParams()
 
@@ -39,6 +37,7 @@ export const ProfileContainer: React.FC<ProfileContainerPropsType> = ({
 
     return <div className='content'>
         <Profile savePhoto={savePhoto}
+            onSave={saveChangedProfile}
             isOwner={!!userId}
             updateStatus={updateStatus}
             profile={profile}
@@ -53,7 +52,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 export default compose<React.ComponentType>(
-    connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto }),
+    connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto, saveChangedProfile }),
     AuthRedirect
 )(ProfileContainer)
 
